@@ -75,7 +75,7 @@ public class PessoaServiceImpl implements PessoaService {
 		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
 		
 		if(pessoaOptional.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa com " + id + " não encontrada");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa com id " + id + " não encontrada");
 		}
 		var pessoaDto = new PessoaDto();
 		BeanUtils.copyProperties(pessoaOptional.get(), pessoaDto);

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ public class PessoaServiceImpl implements PessoaService {
 	private final PessoaRepository pessoaRepository;
 
 	@Override
+	@Transactional
 	public ResponseEntity<Object> cadastrarPessoa(PessoaDto pessoaDto) {
 		var pessoa = new Pessoa();
 		BeanUtils.copyProperties(pessoaDto, pessoa);
@@ -30,6 +33,7 @@ public class PessoaServiceImpl implements PessoaService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Object> atualizarPessoa(Long id, PessoaDto pessoaDto) {
 
 		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
@@ -52,6 +56,7 @@ public class PessoaServiceImpl implements PessoaService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Object> deletarPessoa(Long id) {
 
 		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
@@ -62,6 +67,20 @@ public class PessoaServiceImpl implements PessoaService {
 
 		pessoaRepository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Pessoa deletada com sucesso");
+	}
+
+	@Override
+	public ResponseEntity<Object> listarPessoaPorId(Long id) {
+		
+		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
+		
+		if(pessoaOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa com " + id + " não encontrada");
+		}
+		var pessoaDto = new PessoaDto();
+		BeanUtils.copyProperties(pessoaOptional.get(), pessoaDto);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(pessoaDto);
 	}
 
 }

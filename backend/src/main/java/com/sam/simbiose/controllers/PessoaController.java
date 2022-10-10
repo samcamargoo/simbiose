@@ -45,4 +45,9 @@ public class PessoaController {
 	public ResponseEntity<Object> atualizarPessoa(@PathVariable (value = "id") Long id, @RequestBody @Valid PessoaDto pessoaDto) {
 		return pessoaService.atualizarPessoa(id, pessoaDto);
 	}
+	
+	@GetMapping("/pessoa/{id}")
+	public ResponseEntity<Object> listarPessoaPorId(@PathVariable(value = "id") Long id) {
+		return pessoaService.listarPessoaPorId(id);
+	}
 }

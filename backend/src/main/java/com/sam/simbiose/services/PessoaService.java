@@ -6,11 +6,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.sam.simbiose.entities.Pessoa;
 
+
 public interface PessoaService {
 
-	ResponseEntity<Object> cadastrarUsuario(Pessoa usuario);
-	ResponseEntity<Object> atualizarUsuario(Long id, Pessoa usuario);
-	List<ResponseEntity<Pessoa>> listarUsuarios();
-	ResponseEntity<Object> deletarUsuario(Long id);
+	ResponseEntity<Object> cadastrarPessoa(Pessoa pessoa);
+	ResponseEntity<Object> atualizarPessoa(Long id, Pessoa pessoa);
+	ResponseEntity<List<Pessoa>> listarPessoas();
+	ResponseEntity<Object> deletarPessoa(Long id);
 	
 }

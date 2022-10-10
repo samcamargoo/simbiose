@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sam.simbiose.dtos.PessoaDto;
-import com.sam.simbiose.entities.Pessoa;
 import com.sam.simbiose.services.PessoaService;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ public class PessoaController {
 	private PessoaService pessoaService;
 	
 	@GetMapping("/pessoas")
-	public ResponseEntity<List<Pessoa>> listarPessoas() {
+	public ResponseEntity<List<PessoaDto>> listarPessoas() {
 		return pessoaService.listarPessoas();
 	}
 

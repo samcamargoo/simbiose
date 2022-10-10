@@ -2,6 +2,7 @@ package com.sam.simbiose.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,17 @@ public class PessoaServiceImpl implements PessoaService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada");
 		}
 		
-		var pessoa = new Pessoa();
-		BeanUtils.copyProperties(pessoaDto, pessoa);
-		pessoaRepository.save(pessoa);
+		
+		BeanUtils.copyProperties(pessoaDto, pessoaOptional.get());
+		pessoaRepository.save(pessoaOptional.get());
 		return ResponseEntity.status(HttpStatus.OK).body("Pessoa atualizada com sucesso!");
 	}
 
 	@Override
-	public ResponseEntity<List<Pessoa>> listarPessoas() {
+	public ResponseEntity<List<PessoaDto>> listarPessoas() {
 		List<Pessoa> pessoas = pessoaRepository.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(pessoas);
+		List<PessoaDto> pessoasDto = pessoas.stream().map(pessoa -> new PessoaDto(pessoa)).collect(Collectors.toList());
+		return ResponseEntity.status(HttpStatus.OK).body(pessoasDto);
 	}
 
 	@Override

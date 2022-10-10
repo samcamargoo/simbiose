@@ -1,6 +1,7 @@
 package com.sam.simbiose.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class PessoaServiceImpl implements PessoaService{
+public class PessoaServiceImpl implements PessoaService {
 
 	private final PessoaRepository pessoaRepository;
-	
+
 	@Override
 	public ResponseEntity<Object> cadastrarPessoa(Pessoa pessoa) {
-		
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaRepository.save(pessoa));
 	}
 
@@ -37,10 +37,15 @@ public class PessoaServiceImpl implements PessoaService{
 
 	@Override
 	public ResponseEntity<Object> deletarPessoa(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	
+		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
+
+		if (pessoaOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada");
+		}
+
+		pessoaRepository.deleteById(id);
+		return ResponseEntity.status(HttpStatus.OK).body("Pessoa deletada com sucesso");
+	}
 
 }

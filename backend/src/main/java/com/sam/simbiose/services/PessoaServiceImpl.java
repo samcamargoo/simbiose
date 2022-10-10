@@ -4,24 +4,24 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.sam.simbiose.entities.Usuario;
+import com.sam.simbiose.entities.Pessoa;
 
-public class UsuarioServiceImpl implements UsuarioService{
+public class PessoaServiceImpl implements PessoaService{
 
 	@Override
-	public ResponseEntity<Object> cadastrarUsuario(Usuario usuario) {
+	public ResponseEntity<Object> cadastrarUsuario(Pessoa usuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<Object> atualizarUsuario(Long id, Usuario usuario) {
+	public ResponseEntity<Object> atualizarUsuario(Long id, Pessoa usuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ResponseEntity<Usuario>> listarUsuarios() {
+	public List<ResponseEntity<Pessoa>> listarUsuarios() {
 		// TODO Auto-generated method stub
 		return null;
 	}

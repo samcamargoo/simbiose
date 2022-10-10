@@ -1,14 +1,14 @@
-import { Navbar } from "./components/Navbar";
+import { Sidebar } from "./components/Sidebar";
 import {Flex} from "@chakra-ui/react";
 import { Dashboard } from "./components/Dashboard";
 
 function App() {
   return (
     <>
-    <Flex flexDir="column">
-    <Navbar />
+    
+    <Sidebar />
     <Dashboard />
-    </Flex>
+    
     </>
   )
 }

@@ -1,10 +1,17 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
   Button,
+  CloseButton,
   Flex,
   Input,
   InputGroup,
   InputLeftElement,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AiOutlineUser } from "react-icons/ai";
@@ -12,23 +19,34 @@ import { Pessoa } from "../models/Pessoa";
 import InputMask from "react-input-mask";
 import { ErrorMessage } from "@hookform/error-message";
 import { useState } from "react";
+import { cadastrarPessoa } from "../services/PessoaService";
 
 export function Cadastro() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<Pessoa>({ criteriaMode: "all" });
 
-  const [dataValida, setDataValida] = useState<boolean>(false);
+  const [isCadastrando, setIsCadastrando] = useState<boolean>(false);
+  const [cadastroError, setCadastroError] = useState<boolean>(false);
+  const [cadastroSuccess, setCadastroSuccess] = useState<boolean>(false);
 
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
-    data.dataDeNascimento = new Date(data.dataDeNascimento);
-    if (isNaN(data.dataDeNascimento.getTime())) {
-      return setDataValida(false);
-    }
-    setDataValida(true);
-    console.log(data.dataDeNascimento);
+    setIsCadastrando(true);
+    cadastrarPessoa(data)
+      .then((res) => {
+        setCadastroSuccess(true)
+        console.log("pessoa cadastrada");
+      })
+      .catch((err) => {
+        setCadastroError(true);
+        console.log("erro ao cadastrar pessoa");
+      })
+      .finally(() => {
+        setIsCadastrando(false);
+      });
   };
   return (
     <>
@@ -37,14 +55,18 @@ export function Cadastro() {
         height="100vh"
         width="100%"
         justifyContent="center"
+        flexDir="column"
+        alignItems="center"
       >
         <Flex
           width="300px"
           mt={20}
           height="300px"
+          minHeight="300px"
           p={30}
           justifyContent="center"
           alignItems="center"
+          flexDir="column"
         >
           <form onSubmit={handleSubmit(cadastrar)}>
             <InputGroup mb={2}>
@@ -61,7 +83,7 @@ export function Cadastro() {
                 bg="rgb(18, 18, 20)"
                 focusBorderColor="rgb(130, 87, 230)"
                 {...register("nome", {
-                  required: 'O campo "Nome" é obrigatório',
+                  required: "Nome é obrigatório",
                 })}
               />
             </InputGroup>
@@ -71,7 +93,7 @@ export function Cadastro() {
               render={({ messages }) =>
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
-                  <Text fontSize="10px" color="red" key={type}>
+                  <Text fontSize="14px" color="rgb(211, 66, 66)" key={type}>
                     {message}
                   </Text>
                 ))
@@ -92,7 +114,7 @@ export function Cadastro() {
                 bg="rgb(18, 18, 20)"
                 focusBorderColor="rgb(130, 87, 230)"
                 {...register("email", {
-                  required: 'O campo "Email" é obrigatório',
+                  required: "Email é obrigatório",
                   pattern: {
                     value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
                     message: "Email inválido",
@@ -106,7 +128,7 @@ export function Cadastro() {
               render={({ messages }) =>
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
-                  <Text fontSize="10px" color="red" key={type}>
+                  <Text fontSize="14px" color="rgb(211, 66, 66)" key={type}>
                     {message}
                   </Text>
                 ))
@@ -129,7 +151,7 @@ export function Cadastro() {
                 bg="rgb(18, 18, 20)"
                 focusBorderColor="rgb(130, 87, 230)"
                 {...register("dataDeNascimento", {
-                  required: 'O campo "Data de Nascimento" é obrigatório',
+                  required: "Data de Nascimento é obrigatório",
                 })}
                 onChange={(e) => {
                   e.target.value.replace("/", "");
@@ -142,19 +164,13 @@ export function Cadastro() {
               render={({ messages }) =>
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
-                  <Text fontSize="10px" color="red" key={type}>
+                  <Text fontSize="14px" color="rgb(211, 66, 66)" key={type}>
                     {message}
                   </Text>
                 ))
               }
             />
-            {dataValida ? (
-              <Text></Text>
-            ) : (
-              <Text fontSize="10px" color="red">
-                Data de Nascimento inválida
-              </Text>
-            )}
+
             <Flex justifyContent="space-between">
               <Button background="red.500" color="white">
                 Cancelar
@@ -163,11 +179,27 @@ export function Cadastro() {
                 background="rgb(130, 87, 229)"
                 type="submit"
                 color="white"
+                isLoading={isCadastrando}
               >
                 Cadastrar
               </Button>
             </Flex>
           </form>
+        </Flex>
+        <Flex pt={10}>
+          {cadastroError ? (
+            <Alert status="error">
+              <AlertIcon />
+              Erro ao cadastrar pessoa, verifique os campos.
+            </Alert>
+          ) : (
+            <></>
+          )}
+
+          {cadastroSuccess ? (<Alert status="success">
+              <AlertIcon />
+              Pessoa cadastrada com sucesso!
+            </Alert>) : (<></>)}
         </Flex>
       </Flex>
     </>

@@ -9,6 +9,8 @@ export function Sidebar() {
         backgroundColor="rgb(18, 18, 20)"
         width="280px"
         flexDir="column"
+        boxShadow="inset  -1px 0 #29292e"
+        minWidth="280px"
         p={5}
         
       >

@@ -20,6 +20,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  TableCaption,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Pessoa } from "../models/Pessoa";
@@ -29,7 +30,11 @@ import {
 } from "../services/PessoaService";
 import { FaUserEdit, FaTrashAlt } from "react-icons/fa";
 import InputMask from "react-input-mask";
-import { AiOutlineCalendar, AiOutlineUser, AiOutlineMail } from "react-icons/ai";
+import {
+  AiOutlineCalendar,
+  AiOutlineUser,
+  AiOutlineMail,
+} from "react-icons/ai";
 
 export function Tabela() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
@@ -70,7 +75,6 @@ export function Tabela() {
                   children={<AiOutlineUser />}
                 ></InputLeftElement>
 
-                
                 <Input
                   type="text"
                   placeholder="Nome"
@@ -82,37 +86,37 @@ export function Tabela() {
               </InputGroup>
 
               <InputGroup mb={2}>
-              <InputLeftElement
-                color="rgb(130, 87, 230)"
-                pointerEvents="none"
-                children={<AiOutlineMail />}
-              />
-              <Input
-                type="text"
-                placeholder="Email"
-                bg="rgb(18, 18, 20)"
-                defaultValue={pessoaParaEditar?.email}
-                border="none"
-                focusBorderColor="rgb(130, 87, 230)"
-              />
+                <InputLeftElement
+                  color="rgb(130, 87, 230)"
+                  pointerEvents="none"
+                  children={<AiOutlineMail />}
+                />
+                <Input
+                  type="text"
+                  placeholder="Email"
+                  bg="rgb(18, 18, 20)"
+                  defaultValue={pessoaParaEditar?.email}
+                  border="none"
+                  focusBorderColor="rgb(130, 87, 230)"
+                />
               </InputGroup>
 
               <InputGroup mb={2}>
-              <InputLeftElement
-                color="rgb(130, 87, 230)"
-                pointerEvents="none"
-                children={<AiOutlineCalendar />}
-              />
-              <Input
-                as={InputMask}
-                mask="99/99/9999"
-                type="text"
-                bg="rgb(18, 18, 20)"
-                placeholder="Data de Nascimento"
-                defaultValue={pessoaParaEditar?.dataDeNascimento.toString()}
-                border="none"
-                focusBorderColor="rgb(130, 87, 230)"
-              />
+                <InputLeftElement
+                  color="rgb(130, 87, 230)"
+                  pointerEvents="none"
+                  children={<AiOutlineCalendar />}
+                />
+                <Input
+                  as={InputMask}
+                  mask="99/99/9999"
+                  type="text"
+                  bg="rgb(18, 18, 20)"
+                  placeholder="Data de Nascimento"
+                  defaultValue={pessoaParaEditar?.dataDeNascimento.toString()}
+                  border="none"
+                  focusBorderColor="rgb(130, 87, 230)"
+                />
               </InputGroup>
             </form>
           </ModalBody>
@@ -132,25 +136,35 @@ export function Tabela() {
         </ModalContent>
       </Modal>
 
-      <Flex width="100%" justifyContent="center" alignItems="center">
-        <TableContainer>
-          <Table>
+      <Flex
+        width="100%"
+        height="100vh"
+        minHeight="100%"
+        justifyContent="center"
+        alignItems="center"
+        backgroundColor="rgb(32, 32, 36)"
+      >
+        <TableContainer color="white">
+          <Table size="sm">
+            <TableCaption>{pessoas.length + " pessoas cadastradas"}</TableCaption>
             <Thead>
               <Tr>
-                <Th>Nome</Th>
-                <Th>Email</Th>
-                <Th>Data de Nascimento</Th>
-                <Th>Ações</Th>
+                <Th color="white">Nome</Th>
+                <Th color="white">Email</Th>
+                <Th color="white">Data de Nascimento</Th>
+                <Th color="white">Ações</Th>
               </Tr>
             </Thead>
             <Tbody>
               {pessoas.map((pessoa) => (
                 <Tr>
-                  <Td>{pessoa.nome}</Td>
-                  <Td>{pessoa.email}</Td>
-                  <Td>{pessoa.dataDeNascimento.toString()}</Td>
-                  <Td>
+                  <Td color="#a8a8b3">{pessoa.nome}</Td>
+                  <Td color="#a8a8b3">{pessoa.email}</Td>
+                  <Td color="#a8a8b3">{pessoa.dataDeNascimento.toString()}</Td>
+                  <Td color="#a8a8b3">
                     <Icon
+                      color="rgb(130, 87, 230)"
+                      mr={1}
                       as={FaUserEdit}
                       cursor="pointer"
                       onClick={() => {
@@ -159,6 +173,7 @@ export function Tabela() {
                       }}
                     />
                     <Icon
+                      color="rgb(211, 66, 66)"
                       as={FaTrashAlt}
                       cursor="pointer"
                       onClick={() => {

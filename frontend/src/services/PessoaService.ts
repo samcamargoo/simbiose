@@ -11,3 +11,7 @@ export function cadastrarPessoa (pessoa: Pessoa) {
 export function listarTodasPessoas() {
     return axios.get(API_URL + "pessoas")
 }
+
+export function deletarPessoaPorId(id: string) {
+    return axios.delete(API_URL + "pessoa/" + id)
+}

@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import { Pessoa } from "../models/Pessoa";
 import InputMask from "react-input-mask";
 import { ErrorMessage } from "@hookform/error-message";
@@ -104,7 +104,7 @@ export function Cadastro() {
               <InputLeftElement
                 color="rgb(130, 87, 230)"
                 pointerEvents="none"
-                children={<AiOutlineUser />}
+                children={<AiOutlineMail />}
               />
               <Input
                 type="text"
@@ -139,7 +139,7 @@ export function Cadastro() {
               <InputLeftElement
                 color="rgb(130, 87, 230)"
                 pointerEvents="none"
-                children={<AiOutlineUser />}
+                children={<AiOutlineCalendar />}
               />
               <Input
                 as={InputMask}

@@ -26,6 +26,7 @@ import { useState, useEffect } from "react";
 import { Pessoa } from "../models/Pessoa";
 import {
   deletarPessoaPorId,
+  editarPessoaPorId,
   listarTodasPessoas,
 } from "../services/PessoaService";
 import { FaUserEdit, FaTrashAlt } from "react-icons/fa";
@@ -35,11 +36,13 @@ import {
   AiOutlineUser,
   AiOutlineMail,
 } from "react-icons/ai";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 export function Tabela() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pessoaParaEditar, setPessoaParaEditar] = useState<Pessoa>();
+  const { register, handleSubmit, reset } = useForm<Pessoa>();
 
   function deletarPessoa(pessoa: Pessoa) {
     deletarPessoaPorId(pessoa.id)
@@ -50,6 +53,14 @@ export function Tabela() {
         console.log("erro ao deletar " + pessoa.nome);
       });
   }
+
+  const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
+    editarPessoaPorId(data.id, data).then(() => {
+      console.log("editado com sucesso")
+    }).catch(() => {
+      console.log("deu erro")
+    })
+  };
 
   useEffect(() => {
     listarTodasPessoas()
@@ -66,8 +77,11 @@ export function Tabela() {
         <ModalContent backgroundColor="rgb(32, 32, 36)" color="white">
           <ModalHeader>Editar Pessoa</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <form>
+
+          <form onSubmit={handleSubmit(editarPessoa)}>
+            <ModalBody>
+              <Input hidden defaultValue={pessoaParaEditar?.id} {...register("id")}/>
+
               <InputGroup mb={2}>
                 <InputLeftElement
                   color="rgb(130, 87, 230)"
@@ -82,6 +96,7 @@ export function Tabela() {
                   defaultValue={pessoaParaEditar?.nome}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
+                  {...register("nome")}
                 />
               </InputGroup>
 
@@ -98,6 +113,7 @@ export function Tabela() {
                   defaultValue={pessoaParaEditar?.email}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
+                  {...register("email")}
                 />
               </InputGroup>
 
@@ -116,23 +132,31 @@ export function Tabela() {
                   defaultValue={pessoaParaEditar?.dataDeNascimento.toString()}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
+                  {...register("dataDeNascimento")}
                 />
               </InputGroup>
-            </form>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="red" mr={1} onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button
-              _hover={{}}
-              _active={{}}
-              color="white"
-              background="rgb(130, 87, 230)"
-            >
-              Editar
-            </Button>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                colorScheme="red"
+                mr={1}
+                onClick={() => {
+                  onClose();
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                _hover={{}}
+                _active={{}}
+                color="white"
+                background="rgb(130, 87, 230)"
+              >
+                Editar
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
 
@@ -146,7 +170,9 @@ export function Tabela() {
       >
         <TableContainer color="white">
           <Table size="sm">
-            <TableCaption>{pessoas.length + " pessoas cadastradas"}</TableCaption>
+            <TableCaption>
+              {pessoas.length + " pessoas cadastradas"}
+            </TableCaption>
             <Thead>
               <Tr>
                 <Th color="white">Nome</Th>
@@ -168,6 +194,7 @@ export function Tabela() {
                       as={FaUserEdit}
                       cursor="pointer"
                       onClick={() => {
+                        reset();
                         setPessoaParaEditar(pessoa);
                         onOpen();
                       }}

@@ -12,6 +12,10 @@ export function listarTodasPessoas() {
     return axios.get(API_URL + "pessoas")
 }
 
-export function deletarPessoaPorId(id: string) {
+export function deletarPessoaPorId(id: number) {
     return axios.delete(API_URL + "pessoa/" + id)
+}
+
+export function editarPessoaPorId(id: number, pessoa: Pessoa) {
+    return axios.put(API_URL  + "pessoa/" + id, pessoa)
 }

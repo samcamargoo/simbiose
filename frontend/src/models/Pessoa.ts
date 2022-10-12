@@ -1,5 +1,5 @@
 export type Pessoa = {
-    id: string,
+    id: number,
     nome: string,
     email: string,
     dataDeNascimento: Date

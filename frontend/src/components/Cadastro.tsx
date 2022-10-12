@@ -14,7 +14,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
+import {
+  AiOutlineCalendar,
+  AiOutlineMail,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { Pessoa } from "../models/Pessoa";
 import InputMask from "react-input-mask";
 import { ErrorMessage } from "@hookform/error-message";
@@ -37,7 +41,7 @@ export function Cadastro() {
     setIsCadastrando(true);
     cadastrarPessoa(data)
       .then((res) => {
-        setCadastroSuccess(true)
+        setCadastroSuccess(true);
         console.log("pessoa cadastrada");
       })
       .catch((err) => {
@@ -54,16 +58,15 @@ export function Cadastro() {
         backgroundColor="rgb(32, 32, 36)"
         height="100vh"
         width="100%"
-        justifyContent="center"
         flexDir="column"
         alignItems="center"
       >
         <Flex
-          width="300px"
+          width="480px"
+          minWidth="480px"
           mt={20}
           height="300px"
           minHeight="300px"
-          p={30}
           justifyContent="center"
           alignItems="center"
           flexDir="column"
@@ -196,10 +199,14 @@ export function Cadastro() {
             <></>
           )}
 
-          {cadastroSuccess ? (<Alert status="success">
+          {cadastroSuccess ? (
+            <Alert status="success">
               <AlertIcon />
               Pessoa cadastrada com sucesso!
-            </Alert>) : (<></>)}
+            </Alert>
+          ) : (
+            <></>
+          )}
         </Flex>
       </Flex>
     </>

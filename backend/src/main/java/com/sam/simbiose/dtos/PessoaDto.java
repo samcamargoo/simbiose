@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PessoaDto {
 
+	private Long id;
+	
 	@NotBlank
 	private String nome;
 	
@@ -28,6 +30,7 @@ public class PessoaDto {
 	private LocalDate dataDeNascimento;
 	
 	public PessoaDto(Pessoa pessoa) {
+		this.id = pessoa.getId();
 		this.nome = pessoa.getNome();
 		this.email = pessoa.getEmail();
 		this.dataDeNascimento = pessoa.getDataDeNascimento();

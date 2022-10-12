@@ -14,7 +14,7 @@ export function NavItems() {
 
   return (
     <>
-      <Flex flexDir="column" color="white">
+      <Flex flexDir="column" color="white" textTransform="uppercase">
         <Flex
           color="white"
           _hover={{
@@ -25,6 +25,7 @@ export function NavItems() {
           justifyContent="space-around"
           alignItems="center"
           mb={1}
+          
         >
           <Link
             as={ReachLink}

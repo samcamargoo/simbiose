@@ -21,6 +21,7 @@ import {
   InputGroup,
   InputLeftElement,
   TableCaption,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Pessoa } from "../models/Pessoa";
@@ -37,12 +38,14 @@ import {
   AiOutlineMail,
 } from "react-icons/ai";
 import { SubmitHandler, useForm } from "react-hook-form";
+import {toast, Slide} from "react-toastify"
 
 export function Tabela() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pessoaParaEditar, setPessoaParaEditar] = useState<Pessoa>();
   const { register, handleSubmit, reset } = useForm<Pessoa>();
+  const [loadingPessoas, setLoadingPessoas] = useState<boolean>(false);
 
   function deletarPessoa(pessoa: Pessoa) {
     deletarPessoaPorId(pessoa.id)
@@ -55,17 +58,27 @@ export function Tabela() {
   }
 
   const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
-    editarPessoaPorId(data.id, data).then(() => {
-      console.log("editado com sucesso")
-    }).catch(() => {
-      console.log("deu erro")
-    })
+    editarPessoaPorId(data.id, data)
+      .then(() => {
+        onClose()
+        toast("Pessoa editada com sucesso!", {
+          position: "bottom-center",
+          theme: "dark",
+          autoClose: 1500,
+          transition: Slide
+        });
+      })
+      .catch(() => {
+        console.log("deu erro");
+      });
   };
 
   useEffect(() => {
+    setLoadingPessoas(true);
     listarTodasPessoas()
       .then((res) => {
         setPessoas(res.data);
+        setLoadingPessoas(false);
       })
       .catch((err) => {});
   }, []);
@@ -80,7 +93,11 @@ export function Tabela() {
 
           <form onSubmit={handleSubmit(editarPessoa)}>
             <ModalBody>
-              <Input hidden defaultValue={pessoaParaEditar?.id} {...register("id")}/>
+              <Input
+                hidden
+                defaultValue={pessoaParaEditar?.id}
+                {...register("id")}
+              />
 
               <InputGroup mb={2}>
                 <InputLeftElement
@@ -168,51 +185,57 @@ export function Tabela() {
         alignItems="center"
         backgroundColor="rgb(32, 32, 36)"
       >
-        <TableContainer color="white">
-          <Table size="sm">
-            <TableCaption>
-              {pessoas.length + " pessoas cadastradas"}
-            </TableCaption>
-            <Thead>
-              <Tr>
-                <Th color="white">Nome</Th>
-                <Th color="white">Email</Th>
-                <Th color="white">Data de Nascimento</Th>
-                <Th color="white">Ações</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {pessoas.map((pessoa) => (
+        {loadingPessoas ? (
+          <Spinner color="white"/>
+        ) : (
+          <TableContainer color="white">
+            <Table size="sm">
+              <TableCaption>
+                {pessoas.length + " pessoas cadastradas"}
+              </TableCaption>
+              <Thead>
                 <Tr>
-                  <Td color="#a8a8b3">{pessoa.nome}</Td>
-                  <Td color="#a8a8b3">{pessoa.email}</Td>
-                  <Td color="#a8a8b3">{pessoa.dataDeNascimento.toString()}</Td>
-                  <Td color="#a8a8b3">
-                    <Icon
-                      color="rgb(130, 87, 230)"
-                      mr={1}
-                      as={FaUserEdit}
-                      cursor="pointer"
-                      onClick={() => {
-                        reset();
-                        setPessoaParaEditar(pessoa);
-                        onOpen();
-                      }}
-                    />
-                    <Icon
-                      color="rgb(211, 66, 66)"
-                      as={FaTrashAlt}
-                      cursor="pointer"
-                      onClick={() => {
-                        deletarPessoa(pessoa);
-                      }}
-                    />
-                  </Td>
+                  <Th color="white">Nome</Th>
+                  <Th color="white">Email</Th>
+                  <Th color="white">Data de Nascimento</Th>
+                  <Th color="white">Ações</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {pessoas.map((pessoa) => (
+                  <Tr>
+                    <Td color="#a8a8b3">{pessoa.nome}</Td>
+                    <Td color="#a8a8b3">{pessoa.email}</Td>
+                    <Td color="#a8a8b3">
+                      {pessoa.dataDeNascimento.toString()}
+                    </Td>
+                    <Td color="#a8a8b3">
+                      <Icon
+                        color="rgb(130, 87, 230)"
+                        mr={1}
+                        as={FaUserEdit}
+                        cursor="pointer"
+                        onClick={() => {
+                          reset();
+                          setPessoaParaEditar(pessoa);
+                          onOpen();
+                        }}
+                      />
+                      <Icon
+                        color="rgb(211, 66, 66)"
+                        as={FaTrashAlt}
+                        cursor="pointer"
+                        onClick={() => {
+                          deletarPessoa(pessoa);
+                        }}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
       </Flex>
     </>
   );

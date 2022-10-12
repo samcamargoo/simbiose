@@ -4,6 +4,8 @@ import { Dashboard } from "./components/Dashboard";
 import { Routes, Route } from "react-router-dom";
 import { Cadastro } from "./components/Cadastro";
 import { Tabela } from "./components/Tabela";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
           <Route path="/cadastrar-pessoa" element={<Cadastro />} />
           <Route path="/listar-pessoas" element={<Tabela />} />
         </Routes>
+        <ToastContainer />
       </Flex>
     </>
   );

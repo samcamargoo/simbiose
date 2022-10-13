@@ -38,7 +38,7 @@ import {
   AiOutlineMail,
 } from "react-icons/ai";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {toast, Slide} from "react-toastify"
+import { toast, Slide } from "react-toastify";
 
 export function Tabela() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
@@ -60,12 +60,12 @@ export function Tabela() {
   const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
     editarPessoaPorId(data.id, data)
       .then(() => {
-        onClose()
+        onClose();
         toast("Pessoa editada com sucesso!", {
           position: "bottom-center",
           theme: "dark",
           autoClose: 1500,
-          transition: Slide
+          transition: Slide,
         });
       })
       .catch(() => {
@@ -177,64 +177,70 @@ export function Tabela() {
         </ModalContent>
       </Modal>
 
+     
       <Flex
         width="100%"
-        height="100vh"
-        minHeight="100%"
+        height="100%"
+        minHeight="100vh"
         justifyContent="center"
         alignItems="center"
         backgroundColor="rgb(32, 32, 36)"
+        flexDir="column"
+        p={5}
       >
         {loadingPessoas ? (
-          <Spinner color="white"/>
+          <Spinner color="white" />
         ) : (
-          <TableContainer color="white">
-            <Table size="sm">
-              <TableCaption>
-                {pessoas.length + " pessoas cadastradas"}
-              </TableCaption>
-              <Thead>
-                <Tr>
-                  <Th color="white">Nome</Th>
-                  <Th color="white">Email</Th>
-                  <Th color="white">Data de Nascimento</Th>
-                  <Th color="white">Ações</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {pessoas.map((pessoa) => (
+          <>
+            
+            <TableContainer color="white">
+              <Table size="sm">
+                <TableCaption>
+                  {pessoas.length + " pessoas cadastradas"}
+                </TableCaption>
+                <Thead>
                   <Tr>
-                    <Td color="#a8a8b3">{pessoa.nome}</Td>
-                    <Td color="#a8a8b3">{pessoa.email}</Td>
-                    <Td color="#a8a8b3">
-                      {pessoa.dataDeNascimento.toString()}
-                    </Td>
-                    <Td color="#a8a8b3">
-                      <Icon
-                        color="rgb(130, 87, 230)"
-                        mr={1}
-                        as={FaUserEdit}
-                        cursor="pointer"
-                        onClick={() => {
-                          reset();
-                          setPessoaParaEditar(pessoa);
-                          onOpen();
-                        }}
-                      />
-                      <Icon
-                        color="rgb(211, 66, 66)"
-                        as={FaTrashAlt}
-                        cursor="pointer"
-                        onClick={() => {
-                          deletarPessoa(pessoa);
-                        }}
-                      />
-                    </Td>
+                    <Th color="white">Nome</Th>
+                    <Th color="white">Email</Th>
+                    <Th color="white">Data de Nascimento</Th>
+                    <Th color="white">Ações</Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                </Thead>
+                <Tbody>
+                  {pessoas.map((pessoa) => (
+                    <Tr>
+                      <Td color="#a8a8b3">{pessoa.nome}</Td>
+                      <Td color="#a8a8b3">{pessoa.email}</Td>
+                      <Td color="#a8a8b3">
+                        {pessoa.dataDeNascimento.toString()}
+                      </Td>
+                      <Td color="#a8a8b3">
+                        <Icon
+                          color="rgb(130, 87, 230)"
+                          mr={1}
+                          as={FaUserEdit}
+                          cursor="pointer"
+                          onClick={() => {
+                            reset();
+                            setPessoaParaEditar(pessoa);
+                            onOpen();
+                          }}
+                        />
+                        <Icon
+                          color="rgb(211, 66, 66)"
+                          as={FaTrashAlt}
+                          cursor="pointer"
+                          onClick={() => {
+                            deletarPessoa(pessoa);
+                          }}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
         )}
       </Flex>
     </>

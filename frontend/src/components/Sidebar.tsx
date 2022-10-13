@@ -1,9 +1,15 @@
-import { Flex, Spacer, Heading, Text } from "@chakra-ui/react";
+import { Flex, Spacer, Heading, Text, Drawer } from "@chakra-ui/react";
 import { NavItems } from "./NavItems";
 
 export function Sidebar() {
+
+
+
   return (
     <>
+
+
+    
       <Flex
         minHeight="100vh"
         backgroundColor="rgb(18, 18, 20)"

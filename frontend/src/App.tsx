@@ -1,11 +1,11 @@
-import { Sidebar } from "./components/Sidebar";
-import { Flex } from "@chakra-ui/react";
-import { Dashboard } from "./components/Dashboard";
-import { Routes, Route } from "react-router-dom";
-import { Cadastro } from "./components/Cadastro";
-import { Tabela } from "./components/Tabela";
-import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
+import { Flex } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
+import { Sidebar } from './components/Sidebar';
+import { Tabela } from './components/Tabela';
 
 function App() {
   return (
@@ -13,9 +13,7 @@ function App() {
       <Flex>
         <Sidebar />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/cadastrar-pessoa" element={<Cadastro />} />
-          <Route path="/listar-pessoas" element={<Tabela />} />
+          <Route path="/" element={<Tabela />} />
         </Routes>
         <ToastContainer />
       </Flex>

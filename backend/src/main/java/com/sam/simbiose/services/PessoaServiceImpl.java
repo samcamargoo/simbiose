@@ -28,8 +28,8 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	@Transactional
 	public ResponseEntity<Object> cadastrarPessoa(PessoaDto pessoaDto) {
-		
-		if(existsByEmail(pessoaDto.getEmail())) {
+
+		if (existsByEmail(pessoaDto.getEmail())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email em uso");
 		}
 		var pessoa = new Pessoa();
@@ -43,15 +43,22 @@ public class PessoaServiceImpl implements PessoaService {
 	public ResponseEntity<Object> atualizarPessoa(Long id, PessoaDto pessoaDto) {
 
 		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
-		
-		if(pessoaOptional.isEmpty()) {
+
+		if (pessoaOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada");
 		}
-		
+
+		if(!pessoaOptional.get().getEmail().equals(pessoaDto.getEmail())) {
+			if(existsByEmail(pessoaDto.getEmail())) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("Email em uso");
+			}
+		}
+			
 		
 		BeanUtils.copyProperties(pessoaDto, pessoaOptional.get());
 		pessoaRepository.save(pessoaOptional.get());
 		return ResponseEntity.status(HttpStatus.OK).body("Pessoa atualizada com sucesso!");
+
 	}
 
 	@Override
@@ -77,22 +84,22 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	public ResponseEntity<Object> listarPessoaPorId(Long id) {
-		
+
 		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
-		
-		if(pessoaOptional.isEmpty()) {
+
+		if (pessoaOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa com id " + id + " não encontrada");
 		}
 		var pessoaDto = new PessoaDto();
 		BeanUtils.copyProperties(pessoaOptional.get(), pessoaDto);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(pessoaDto);
 	}
 
 	@Override
 	public boolean existsByEmail(String email) {
-		
-		if(pessoaRepository.existsByEmail(email)) {
+
+		if (pessoaRepository.existsByEmail(email)) {
 			return true;
 		}
 		return false;

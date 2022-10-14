@@ -4,8 +4,8 @@ import { Flex } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { Dashboard } from './components/Dashboard';
 import { Sidebar } from './components/Sidebar';
-import { Tabela } from './components/Tabela';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Flex>
         <Sidebar />
         <Routes>
-          <Route path="/" element={<Tabela />} />
+          <Route path="/" element={<Dashboard />} />
         </Routes>
         <ToastContainer />
       </Flex>

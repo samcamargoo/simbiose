@@ -66,10 +66,12 @@ export function NavItems() {
   };
 
   function verificarEmail(email: string) {
+
+    setEmailEmUso(false)
     {
       /* verificamos se o email contem os caracteres necessarios, se sim então faremos a verificação no backend para checar se o email já está em uso*/
     }
-    
+
     let pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     if (pattern.test(email)) {
       verificarEmailPessoa(email)
@@ -153,7 +155,7 @@ export function NavItems() {
                   onBlur={(e) => verificarEmail(e.target.value)}
                 />
               </InputGroup>
-              {emailEmUso ? <Text>Email em uso</Text> : null}
+              {emailEmUso ? <Text fontSize="14px" color="rgb(211, 66, 66)">Email em uso</Text> : null}
               <ErrorMessage
                 errors={errors}
                 name="email"
@@ -214,6 +216,7 @@ export function NavItems() {
               Cancelar
             </Button>
             <Button
+            disabled={emailEmUso}
               type="submit"
               form="cadastro-pessoa"
               background="rgb(130, 87, 229)"

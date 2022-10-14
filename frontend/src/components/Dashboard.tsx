@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Show,
   Spinner,
   Table,
   TableCaption,
@@ -23,17 +24,25 @@ import {
   Thead,
   Tr,
   useDisclosure,
-} from '@chakra-ui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser } from 'react-icons/ai';
-import { FaTrashAlt, FaUserEdit } from 'react-icons/fa';
-import InputMask from 'react-input-mask';
-import { Slide, toast } from 'react-toastify';
+} from "@chakra-ui/react";
+import { ErrorMessage } from "@hookform/error-message";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  AiOutlineCalendar,
+  AiOutlineMail,
+  AiOutlineUser,
+} from "react-icons/ai";
+import { FaTrashAlt, FaUserEdit } from "react-icons/fa";
+import InputMask from "react-input-mask";
+import { Slide, toast } from "react-toastify";
 
-import { Pessoa } from '../models/Pessoa';
-import { deletarPessoaPorId, editarPessoaPorId, listarTodasPessoas } from '../services/PessoaService';
+import { Pessoa } from "../models/Pessoa";
+import {
+  deletarPessoaPorId,
+  editarPessoaPorId,
+  listarTodasPessoas,
+} from "../services/PessoaService";
 
 export function Dashboard() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
@@ -93,7 +102,6 @@ export function Dashboard() {
         setIsEditando(false);
 
         setEmailEmUso(true);
-        console.log(err.response.data);
         setEmailEmUsoMessage(err.response.data);
       });
   };
@@ -275,6 +283,7 @@ export function Dashboard() {
           <Spinner color="white" />
         ) : (
           <>
+           
             <TableContainer color="white">
               <Table size="sm">
                 <TableCaption>

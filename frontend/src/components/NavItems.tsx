@@ -229,6 +229,7 @@ export function NavItems() {
             bg: "rgb(130, 87, 229)",
           }}
           variant="ghost"
+          bg={["rgb(130, 87, 229)", "rgb(130, 87, 229)", "rgb(130, 87, 229)", "none"]}
           borderRadius="lg"
           height="70px"
           mb={1}

@@ -1,5 +1,6 @@
 package com.sam.simbiose.services;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	@Transactional
 	public ResponseEntity<Object> cadastrarPessoa(PessoaDto pessoaDto) {
+		
+		if(existsByEmail(pessoaDto.getEmail())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email em uso");
+		}
 		var pessoa = new Pessoa();
 		BeanUtils.copyProperties(pessoaDto, pessoa);
 		pessoaRepository.save(pessoa);
@@ -50,7 +56,7 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	public ResponseEntity<List<PessoaDto>> listarPessoas() {
-		List<Pessoa> pessoas = pessoaRepository.findAll();
+		List<Pessoa> pessoas = pessoaRepository.findAll(Sort.by(Sort.Direction.ASC, "nome"));
 		List<PessoaDto> pessoasDto = pessoas.stream().map(pessoa -> new PessoaDto(pessoa)).collect(Collectors.toList());
 		return ResponseEntity.status(HttpStatus.OK).body(pessoasDto);
 	}
@@ -81,6 +87,15 @@ public class PessoaServiceImpl implements PessoaService {
 		BeanUtils.copyProperties(pessoaOptional.get(), pessoaDto);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(pessoaDto);
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		
+		if(pessoaRepository.existsByEmail(email)) {
+			return true;
+		}
+		return false;
 	}
 
 }

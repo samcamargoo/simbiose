@@ -14,5 +14,6 @@ public interface PessoaService {
 	ResponseEntity<List<PessoaDto>> listarPessoas();
 	ResponseEntity<Object> deletarPessoa(Long id);
 	ResponseEntity<Object> listarPessoaPorId(Long id);
+	boolean existsByEmail(String email);
 	
 }

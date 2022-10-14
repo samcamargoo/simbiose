@@ -13,26 +13,17 @@ import {
   InputLeftElement,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
-import { ErrorMessage } from "@hookform/error-message";
-import React, { HtmlHTMLAttributes, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  AiOutlineCalendar,
-  AiOutlineMail,
-  AiOutlineUser,
-  AiOutlineUserAdd,
-} from "react-icons/ai";
-import InputMask from "react-input-mask";
-import { Navigate } from "react-router-dom";
-import { toast } from "react-toastify";
+} from '@chakra-ui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import React, { HtmlHTMLAttributes, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
+import InputMask from 'react-input-mask';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import { Pessoa } from "../models/Pessoa";
-import {
-  cadastrarPessoa,
-  verificarEmailPessoa,
-} from "../services/PessoaService";
-import { useNavigate } from "react-router-dom";
+import { Pessoa } from '../models/Pessoa';
+import { cadastrarPessoa, verificarEmailPessoa } from '../services/PessoaService';
 
 export function NavItems() {
   const { isOpen, onOpen, onClose } = useDisclosure();

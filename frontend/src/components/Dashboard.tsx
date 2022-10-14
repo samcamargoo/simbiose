@@ -1,47 +1,39 @@
 import {
+  Button,
   Flex,
   Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Table,
+  TableCaption,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
-  ModalFooter,
-  Button,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  TableCaption,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { Pessoa } from "../models/Pessoa";
-import {
-  deletarPessoaPorId,
-  editarPessoaPorId,
-  listarTodasPessoas,
-  verificarEmailPessoa,
-} from "../services/PessoaService";
-import { FaUserEdit, FaTrashAlt, FaWindows } from "react-icons/fa";
-import InputMask from "react-input-mask";
-import {
-  AiOutlineCalendar,
-  AiOutlineUser,
-  AiOutlineMail,
-} from "react-icons/ai";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { toast, Slide } from "react-toastify";
-import { ErrorMessage } from "@hookform/error-message";
+} from '@chakra-ui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser } from 'react-icons/ai';
+import { FaTrashAlt, FaUserEdit } from 'react-icons/fa';
+import InputMask from 'react-input-mask';
+import { Slide, toast } from 'react-toastify';
+
+import { Pessoa } from '../models/Pessoa';
+import { deletarPessoaPorId, editarPessoaPorId, listarTodasPessoas } from '../services/PessoaService';
 
 export function Dashboard() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
@@ -63,6 +55,7 @@ export function Dashboard() {
   const [isDeletando, setIsDeletando] = useState<boolean>(false);
   const [emailEmUso, setEmailEmUso] = useState<boolean>(false);
   const [isEditando, setIsEditando] = useState<boolean>(false);
+  const [emailEmUsoMessage, setEmailEmUsoMessage] = useState<string>("");
 
   function deletarPessoa(pessoa?: Pessoa) {
     setIsDeletando(true);
@@ -77,13 +70,12 @@ export function Dashboard() {
         onCloseDelete();
         carregarListaDePessoas();
       })
-      .catch(() => {
-        console.log("erro ao deletar " + pessoa?.nome);
-      })
+      .catch((err) => {})
       .finally(() => setIsDeletando(false));
   }
 
   const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
+    setEmailEmUso(false);
     setIsEditando(true);
     editarPessoaPorId(data.id, data)
       .then(() => {
@@ -97,8 +89,12 @@ export function Dashboard() {
         });
         carregarListaDePessoas();
       })
-      .catch(() => {
-        console.log("deu erro");
+      .catch((err) => {
+        setIsEditando(false);
+
+        setEmailEmUso(true);
+        console.log(err.response.data);
+        setEmailEmUsoMessage(err.response.data);
       });
   };
 
@@ -109,32 +105,14 @@ export function Dashboard() {
         setPessoas(res.data);
         setLoadingPessoas(false);
       })
-      .catch((err) => {});
+      .catch(() => {
+        console.log("erro ao carregar pessoas");
+        setLoadingPessoas(false);
+      });
   }
   useEffect(() => {
     carregarListaDePessoas();
   }, []);
-
-  function checarEmail(email: string) {
-    setEmailEmUso(false);
-    {
-      /* verificamos se o email contem os caracteres necessarios, se sim então faremos a verificação no backend para checar se o email já está em uso*/
-    }
-
-    let pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    if (pattern.test(email)) {
-      verificarEmailPessoa(email)
-        .then((res) => {
-          setEmailEmUso(false);
-          if (res.data) {
-            setEmailEmUso(true);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
 
   return (
     <>
@@ -206,6 +184,7 @@ export function Dashboard() {
                   children={<AiOutlineMail />}
                 />
                 <Input
+                  id="email"
                   type="text"
                   placeholder="Email"
                   bg="rgb(18, 18, 20)"
@@ -219,12 +198,11 @@ export function Dashboard() {
                       message: "Email inválido",
                     },
                   })}
-                  onBlur={(e) => checarEmail(e.target.value)}
                 />
               </InputGroup>
               {emailEmUso ? (
                 <Text fontSize="14px" color="rgb(211, 66, 66)">
-                  Email em uso
+                  {emailEmUsoMessage}
                 </Text>
               ) : null}
               <ErrorMessage
@@ -274,7 +252,6 @@ export function Dashboard() {
                 _active={{}}
                 color="white"
                 background="rgb(130, 87, 230)"
-                disabled={emailEmUso}
                 isLoading={isEditando}
               >
                 Editar

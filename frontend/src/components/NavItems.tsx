@@ -13,16 +13,26 @@ import {
   InputLeftElement,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import React, { HtmlHTMLAttributes, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
-import InputMask from 'react-input-mask';
-import { toast } from 'react-toastify';
+} from "@chakra-ui/react";
+import { ErrorMessage } from "@hookform/error-message";
+import React, { HtmlHTMLAttributes, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  AiOutlineCalendar,
+  AiOutlineMail,
+  AiOutlineUser,
+  AiOutlineUserAdd,
+} from "react-icons/ai";
+import InputMask from "react-input-mask";
+import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { Pessoa } from '../models/Pessoa';
-import { cadastrarPessoa } from '../services/PessoaService';
+import { Pessoa } from "../models/Pessoa";
+import {
+  cadastrarPessoa,
+  verificarEmailPessoa,
+} from "../services/PessoaService";
+import { useNavigate } from "react-router-dom";
 
 export function NavItems() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,6 +43,9 @@ export function NavItems() {
     formState: { errors },
   } = useForm<Pessoa>({ criteriaMode: "all" });
   const [isCadastrando, setIsCadastrando] = useState<boolean>(false);
+  const [emailEmUso, setEmailEmUso] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
     setIsCadastrando(true);
@@ -44,15 +57,33 @@ export function NavItems() {
           theme: "dark",
           position: "bottom-center",
         });
+        navigate("/");
       })
-      .catch(() => {
-        console.log("erro ao cadastrar pessoa");
-      })
+      .catch(() => {})
       .finally(() => {
         setIsCadastrando(false);
       });
   };
 
+  function verificarEmail(email: string) {
+    {
+      /* verificamos se o email contem os caracteres necessarios, se sim então faremos a verificação no backend para checar se o email já está em uso*/
+    }
+    
+    let pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    if (pattern.test(email)) {
+      verificarEmailPessoa(email)
+        .then((res) => {
+          setEmailEmUso(false);
+          if (res.data) {
+            setEmailEmUso(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
   return (
     <>
       {/* Drawer de cadastro de pessoa*/}
@@ -79,6 +110,11 @@ export function NavItems() {
                   focusBorderColor="rgb(130, 87, 230)"
                   {...register("nome", {
                     required: "Nome é obrigatório",
+                    pattern: {
+                      value:
+                        /\b[A-Za-zÀ-ú][A-Za-zÀ-ú]+,?[A-Za-zÀ-ú][A-Za-zÀ-ú]{2,19}\b/gi,
+                      message: "Nome inválido",
+                    },
                   })}
                 />
               </InputGroup>
@@ -114,8 +150,10 @@ export function NavItems() {
                       message: "Email inválido",
                     },
                   })}
+                  onBlur={(e) => verificarEmail(e.target.value)}
                 />
               </InputGroup>
+              {emailEmUso ? <Text>Email em uso</Text> : null}
               <ErrorMessage
                 errors={errors}
                 name="email"

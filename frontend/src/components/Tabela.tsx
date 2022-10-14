@@ -30,7 +30,7 @@ import {
   editarPessoaPorId,
   listarTodasPessoas,
 } from "../services/PessoaService";
-import { FaUserEdit, FaTrashAlt } from "react-icons/fa";
+import { FaUserEdit, FaTrashAlt, FaWindows } from "react-icons/fa";
 import InputMask from "react-input-mask";
 import {
   AiOutlineCalendar,
@@ -67,6 +67,7 @@ export function Tabela() {
           autoClose: 1500,
           transition: Slide,
         });
+        
       })
       .catch(() => {
         console.log("deu erro");

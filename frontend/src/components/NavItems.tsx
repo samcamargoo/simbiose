@@ -13,17 +13,24 @@ import {
   InputLeftElement,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import React, { HtmlHTMLAttributes, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
-import InputMask from 'react-input-mask';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+} from "@chakra-ui/react";
+import { ErrorMessage } from "@hookform/error-message";
+import React, { HtmlHTMLAttributes, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  AiOutlineCalendar,
+  AiOutlineMail,
+  AiOutlineUser,
+  AiOutlineUserAdd,
+} from "react-icons/ai";
+import InputMask from "react-input-mask";
+import { toast } from "react-toastify";
 
-import { Pessoa } from '../models/Pessoa';
-import { cadastrarPessoa, verificarEmailPessoa } from '../services/PessoaService';
+import { Pessoa } from "../models/Pessoa";
+import {
+  cadastrarPessoa,
+  verificarEmailPessoa,
+} from "../services/PessoaService";
 
 export function NavItems() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,10 +42,17 @@ export function NavItems() {
   } = useForm<Pessoa>({ criteriaMode: "all" });
   const [isCadastrando, setIsCadastrando] = useState<boolean>(false);
   const [emailEmUso, setEmailEmUso] = useState<boolean>(false);
-
-  const navigate = useNavigate();
+  const [dataInvalida, setDataInvalida] = useState<boolean>(false);
 
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
+
+      setDataInvalida(false);
+
+    if (!isDataValida(data.dataDeNascimento)) {
+      setDataInvalida(true)
+      return;
+    }
+
     setIsCadastrando(true);
     cadastrarPessoa(data)
       .then(() => {
@@ -48,7 +62,7 @@ export function NavItems() {
           theme: "dark",
           position: "bottom-center",
         });
-        navigate("/");
+        window.location.reload();
       })
       .catch(() => {})
       .finally(() => {
@@ -57,8 +71,7 @@ export function NavItems() {
   };
 
   function verificarEmail(email: string) {
-
-    setEmailEmUso(false)
+    setEmailEmUso(false);
     {
       /* verificamos se o email contem os caracteres necessarios, se sim então faremos a verificação no backend para checar se o email já está em uso*/
     }
@@ -76,6 +89,16 @@ export function NavItems() {
           console.log(err);
         });
     }
+  }
+
+  function isDataValida(dataDeNascimento: string) {
+    const nascimento = new Date(dataDeNascimento);
+
+    if ((isNaN(nascimento.getTime())) || (nascimento > new Date())) {
+      return false;
+    }
+
+    return true;
   }
   return (
     <>
@@ -146,7 +169,11 @@ export function NavItems() {
                   onBlur={(e) => verificarEmail(e.target.value)}
                 />
               </InputGroup>
-              {emailEmUso ? <Text fontSize="14px" color="rgb(211, 66, 66)">Email em uso</Text> : null}
+              {emailEmUso ? (
+                <Text fontSize="14px" color="rgb(211, 66, 66)">
+                  Email em uso
+                </Text>
+              ) : null}
               <ErrorMessage
                 errors={errors}
                 name="email"
@@ -193,6 +220,7 @@ export function NavItems() {
                   ))
                 }
               />
+              {dataInvalida ? (<Text fontSize="14px" color="rgb(211, 66, 66)">Data inválida</Text>) : null}
             </form>
           </DrawerBody>
           <DrawerFooter>
@@ -207,7 +235,7 @@ export function NavItems() {
               Cancelar
             </Button>
             <Button
-            disabled={emailEmUso}
+              disabled={emailEmUso}
               type="submit"
               form="cadastro-pessoa"
               background="rgb(130, 87, 229)"
@@ -229,7 +257,12 @@ export function NavItems() {
             bg: "rgb(130, 87, 229)",
           }}
           variant="ghost"
-          bg={["rgb(130, 87, 229)", "rgb(130, 87, 229)", "rgb(130, 87, 229)", "none"]}
+          bg={[
+            "rgb(130, 87, 229)",
+            "rgb(130, 87, 229)",
+            "rgb(130, 87, 229)",
+            "none",
+          ]}
           borderRadius="lg"
           height="70px"
           mb={1}

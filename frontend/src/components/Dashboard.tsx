@@ -136,7 +136,7 @@ export function Dashboard() {
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="red" mr={1} onClick={onCloseDelete}>
-              Cancelar
+              Não
             </Button>
             <Button
               background="rgb(130, 87, 229)"
@@ -146,7 +146,7 @@ export function Dashboard() {
               onClick={() => deletarPessoa(pessoaParaDeletar)}
               isLoading={isDeletando}
             >
-              Prosseguir
+              Sim
             </Button>
           </ModalFooter>
         </ModalContent>

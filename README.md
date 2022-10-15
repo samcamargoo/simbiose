@@ -2,13 +2,11 @@
 ## Teste técnico para a Simbiose Ventures
 
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
 Teste realizado para mostrar meus conhecimentos em backend e frontend.
 
 ## URL do teste online
 
-<https://simbiose-teste-tecnico.netlify.app/>
+[Abrir em uma nova guia](https://simbiose-teste-tecnico.netlify.app/)
 
 ## Tecnologias utilizadas
 - Java 17

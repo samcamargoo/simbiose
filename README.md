@@ -15,6 +15,10 @@ Teste realizado para mostrar meus conhecimentos em backend e frontend.
 - React.js
 - Typescript
 
+## Serviços Cloud utilizados
+- Netlify
+- Heroku
+
 ## Features
 
 - Cadastrar pessoa

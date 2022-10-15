@@ -58,7 +58,7 @@ export function NavItems() {
       .then(() => {
         reset();
         onClose();
-        toast(data.nome + " cadastrado com sucesso", {
+        toast.success(data.nome + " cadastrado com sucesso", {
           theme: "dark",
           position: "bottom-center",
         });

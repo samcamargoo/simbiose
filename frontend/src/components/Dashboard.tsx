@@ -90,7 +90,7 @@ export function Dashboard() {
       .then(() => {
         setIsEditando(false);
         onClose();
-        toast("Pessoa editada com sucesso!", {
+        toast.success("Pessoa editada com sucesso!", {
           position: "bottom-center",
           theme: "dark",
           autoClose: 1500,

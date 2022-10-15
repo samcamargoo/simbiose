@@ -6,7 +6,7 @@ Teste realizado para mostrar meus conhecimentos em backend e frontend.
 
 ## URL do teste online
 
-[Abrir em uma nova guia](https://simbiose-teste-tecnico.netlify.app/)
+<https://simbiose-teste-tecnico.netlify.app/>
 
 ## Tecnologias utilizadas
 - Java 17

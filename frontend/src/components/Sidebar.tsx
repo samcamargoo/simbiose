@@ -31,8 +31,8 @@ export function Sidebar() {
       >
         <Flex alignItems="center" mb={10} justifyContent="space-between" >
           
-            <Heading color="white" mb={2} >
-              Logo
+            <Heading color="white" mb={2} fontSize="28px" >
+              Simbiose
             </Heading>
           
           <Flex>

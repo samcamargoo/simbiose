@@ -48,13 +48,10 @@ public class PessoaServiceImpl implements PessoaService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada");
 		}
 
-		if(!pessoaOptional.get().getEmail().equals(pessoaDto.getEmail())) {
-			if(existsByEmail(pessoaDto.getEmail())) {
-				return ResponseEntity.status(HttpStatus.CONFLICT).body("Email em uso");
-			}
+		if (!pessoaOptional.get().getEmail().equals(pessoaDto.getEmail()) && existsByEmail(pessoaDto.getEmail())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email em uso");
 		}
-			
-		
+
 		BeanUtils.copyProperties(pessoaDto, pessoaOptional.get());
 		pessoaRepository.save(pessoaOptional.get());
 		return ResponseEntity.status(HttpStatus.OK).body("Pessoa atualizada com sucesso!");

@@ -155,6 +155,7 @@ export function Dashboard() {
       {/* Modal de edição de pessoa */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
+        
         <ModalContent backgroundColor="rgb(32, 32, 36)" color="white">
           <ModalHeader>Editar Pessoa</ModalHeader>
           <ModalCloseButton />
@@ -249,6 +250,7 @@ export function Dashboard() {
                 colorScheme="red"
                 mr={1}
                 onClick={() => {
+                  setEmailEmUso(false)
                   onClose();
                 }}
               >

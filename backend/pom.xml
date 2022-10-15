@@ -14,7 +14,7 @@
 	<name>backend</name>
 	<description>teste tecnico Simbiose Venture</description>
 	<properties>
-		<java.version>17</java.version>
+		
 	</properties>
 	<dependencies>
 		<dependency>

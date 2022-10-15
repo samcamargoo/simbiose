@@ -6,6 +6,10 @@
 
 Teste realizado para mostrar meus conhecimentos em backend e frontend.
 
+## URL do teste online
+
+<https://simbiose-teste-tecnico.netlify.app/>
+
 ## Tecnologias utilizadas
 - Java 17
 - Spring Boot
@@ -19,6 +23,7 @@ Teste realizado para mostrar meus conhecimentos em backend e frontend.
 - Editar pessoa
 - Listar pessoas
 - Deletar pessoa
+- Responsividade
 
 ## Instalação frontend
 

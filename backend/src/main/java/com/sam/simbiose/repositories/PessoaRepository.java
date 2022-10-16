@@ -6,5 +6,5 @@ import com.sam.simbiose.entities.Pessoa;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 
-	boolean existsByEmail(String email);
+	boolean existsByEmailIgnoreCase(String email);
 }

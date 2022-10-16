@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sam.simbiose.entities.Pessoa;
@@ -25,7 +26,7 @@ public class PessoaDto {
 	@NotBlank
 	private String email;
 	
-	@Past
+	@PastOrPresent
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataDeNascimento;
 	

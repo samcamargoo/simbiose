@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Show,
   Spinner,
   Table,
   TableCaption,
@@ -34,11 +33,10 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { FaTrashAlt, FaUserEdit } from "react-icons/fa";
-import InputMask from "react-input-mask";
 import { Slide, toast } from "react-toastify";
 
 import { Pessoa } from "../models/Pessoa";
-import { isDataValida } from "../services/AuxiliarService";
+import { formatarDataParaLocal, retornarDataPadrao } from "../services/AuxiliarService";
 import {
   deletarPessoaPorId,
   editarPessoaPorId,
@@ -87,12 +85,8 @@ export function Dashboard() {
   }
 
   const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
-    
     setEmailEmUso(false);
-    if (!isDataValida(data.dataDeNascimento)) {
-      setDataInvalida(true);
-      return;
-    }
+    data.dataDeNascimento = formatarDataParaLocal(data.dataDeNascimento);
 
     setIsEditando(true);
     editarPessoaPorId(data.id, data)
@@ -112,8 +106,10 @@ export function Dashboard() {
 
         setEmailEmUso(true);
         setEmailEmUsoMessage(err.response.data);
-      })
+      });
   };
+
+  
 
   function carregarListaDePessoas() {
     setLoadingPessoas(true);
@@ -242,12 +238,11 @@ export function Dashboard() {
                   children={<AiOutlineCalendar />}
                 />
                 <Input
-                  as={InputMask}
-                  mask="99/99/9999"
-                  type="text"
+                  type="date"
+                  max={new Date().toISOString().split("T")[0]}
                   bg="rgb(18, 18, 20)"
                   placeholder="Data de Nascimento"
-                  defaultValue={pessoaParaEditar?.dataDeNascimento.toString()}
+                  defaultValue={pessoaParaEditar?.dataDeNascimento}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
                   {...register("dataDeNascimento", {
@@ -332,7 +327,7 @@ export function Dashboard() {
                       <Td color="#a8a8b3">{pessoa.nome}</Td>
                       <Td color="#a8a8b3">{pessoa.email}</Td>
                       <Td color="#a8a8b3">
-                        {pessoa.dataDeNascimento.toString()}
+                        {pessoa.dataDeNascimento}
                       </Td>
                       <Td color="#a8a8b3">
                         <Icon
@@ -341,10 +336,16 @@ export function Dashboard() {
                           as={FaUserEdit}
                           cursor="pointer"
                           onClick={() => {
-                            setEmailEmUso(false)
+                            setEmailEmUso(false);
                             setDataInvalida(false);
                             reset();
-                            setPessoaParaEditar(pessoa);
+                            const pessoaParaEditar: Pessoa = {
+                              id: pessoa.id,
+                              nome: pessoa.nome,
+                              email: pessoa.email,
+                              dataDeNascimento: retornarDataPadrao(pessoa.dataDeNascimento)
+                            }
+                            setPessoaParaEditar(pessoaParaEditar);
                             onOpen();
                           }}
                         />

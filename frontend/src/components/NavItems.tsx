@@ -13,25 +13,16 @@ import {
   InputLeftElement,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
-import { ErrorMessage } from "@hookform/error-message";
-import React, { HtmlHTMLAttributes, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  AiOutlineCalendar,
-  AiOutlineMail,
-  AiOutlineUser,
-  AiOutlineUserAdd,
-} from "react-icons/ai";
-import InputMask from "react-input-mask";
-import { toast } from "react-toastify";
+} from '@chakra-ui/react';
+import { ErrorMessage } from '@hookform/error-message';
+import React, { HtmlHTMLAttributes, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 
-import { Pessoa } from "../models/Pessoa";
-import { isDataValida } from "../services/AuxiliarService";
-import {
-  cadastrarPessoa,
-  verificarEmailPessoa,
-} from "../services/PessoaService";
+import { Pessoa } from '../models/Pessoa';
+import { formatarDataParaLocal } from '../services/AuxiliarService';
+import { cadastrarPessoa, verificarEmailPessoa } from '../services/PessoaService';
 
 export function NavItems() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,10 +39,8 @@ export function NavItems() {
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
     setDataInvalida(false);
 
-    if (!isDataValida(data.dataDeNascimento)) {
-      setDataInvalida(true);
-      return;
-    }
+  {/*Formatar Data MM-DD-YYYY para DD/MM/YYYY */}
+    data.dataDeNascimento = formatarDataParaLocal(data.dataDeNascimento);
 
     setIsCadastrando(true);
     cadastrarPessoa(data)
@@ -185,10 +174,8 @@ export function NavItems() {
                   children={<AiOutlineCalendar />}
                 />
                 <Input
-                  id="dataNascimento"
-                  as={InputMask}
-                  mask="99/99/9999"
-                  type="text"
+                  max={new Date().toISOString().split("T")[0]}
+                  type="date"
                   placeholder="Data de Nascimento"
                   border="none"
                   color="white"

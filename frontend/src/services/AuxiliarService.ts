@@ -1,9 +1,12 @@
-export function isDataValida(dataDeNascimento: string) {
+export function formatarDataParaLocal(dataDeNascimento: string) {
 
-  const nascimento = new Date(dataDeNascimento);
+  const cortandoData = dataDeNascimento.replaceAll("-", "/")
+  dataDeNascimento = cortandoData.split("/").reverse().join("/")
+  return dataDeNascimento;
+}
 
-  if (isNaN(nascimento.getTime()) || nascimento > new Date()) {
-    return false;
-  }
-  return true;
+export function retornarDataPadrao(data: string) {
+  const cortandoData = data.replaceAll("/", "-")
+  data = cortandoData.split("-").reverse().join("-")
+  return data;
 }

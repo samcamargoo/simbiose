@@ -96,7 +96,7 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public boolean existsByEmail(String email) {
 
-		if (pessoaRepository.existsByEmail(email)) {
+		if (pessoaRepository.existsByEmailIgnoreCase(email)) {
 			return true;
 		}
 		return false;

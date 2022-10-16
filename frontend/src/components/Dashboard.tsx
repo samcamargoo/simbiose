@@ -38,6 +38,7 @@ import InputMask from "react-input-mask";
 import { Slide, toast } from "react-toastify";
 
 import { Pessoa } from "../models/Pessoa";
+import { isDataValida } from "../services/AuxiliarService";
 import {
   deletarPessoaPorId,
   editarPessoaPorId,
@@ -66,6 +67,8 @@ export function Dashboard() {
   const [isEditando, setIsEditando] = useState<boolean>(false);
   const [emailEmUsoMessage, setEmailEmUsoMessage] = useState<string>("");
 
+  const [dataInvalida, setDataInvalida] = useState<boolean>(false);
+
   function deletarPessoa(pessoa?: Pessoa) {
     setIsDeletando(true);
     deletarPessoaPorId(pessoa!.id)
@@ -84,7 +87,13 @@ export function Dashboard() {
   }
 
   const editarPessoa: SubmitHandler<Pessoa> = (data: Pessoa) => {
+    
     setEmailEmUso(false);
+    if (!isDataValida(data.dataDeNascimento)) {
+      setDataInvalida(true);
+      return;
+    }
+
     setIsEditando(true);
     editarPessoaPorId(data.id, data)
       .then(() => {
@@ -103,7 +112,7 @@ export function Dashboard() {
 
         setEmailEmUso(true);
         setEmailEmUsoMessage(err.response.data);
-      });
+      })
   };
 
   function carregarListaDePessoas() {
@@ -155,7 +164,7 @@ export function Dashboard() {
       {/* Modal de edição de pessoa */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        
+
         <ModalContent backgroundColor="rgb(32, 32, 36)" color="white">
           <ModalHeader>Editar Pessoa</ModalHeader>
           <ModalCloseButton />
@@ -241,16 +250,35 @@ export function Dashboard() {
                   defaultValue={pessoaParaEditar?.dataDeNascimento.toString()}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
-                  {...register("dataDeNascimento")}
+                  {...register("dataDeNascimento", {
+                    required: "Data de Nascimento obrigatório",
+                  })}
                 />
               </InputGroup>
+              <ErrorMessage
+                errors={errors}
+                name="dataDeNascimento"
+                render={({ messages }) =>
+                  messages &&
+                  Object.entries(messages).map(([type, message]) => (
+                    <Text fontSize="14px" color="rgb(211, 66, 66)" key={type}>
+                      {message}
+                    </Text>
+                  ))
+                }
+              />
+              {dataInvalida ? (
+                <Text fontSize="14px" color="rgb(211, 66, 66)">
+                  Data inválida
+                </Text>
+              ) : null}
             </ModalBody>
             <ModalFooter>
               <Button
                 colorScheme="red"
                 mr={1}
                 onClick={() => {
-                  setEmailEmUso(false)
+                  setEmailEmUso(false);
                   onClose();
                 }}
               >
@@ -285,7 +313,6 @@ export function Dashboard() {
           <Spinner color="white" />
         ) : (
           <>
-           
             <TableContainer color="white">
               <Table size="sm">
                 <TableCaption>
@@ -314,6 +341,8 @@ export function Dashboard() {
                           as={FaUserEdit}
                           cursor="pointer"
                           onClick={() => {
+                            setEmailEmUso(false)
+                            setDataInvalida(false);
                             reset();
                             setPessoaParaEditar(pessoa);
                             onOpen();

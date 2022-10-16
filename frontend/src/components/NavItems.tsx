@@ -27,6 +27,7 @@ import InputMask from "react-input-mask";
 import { toast } from "react-toastify";
 
 import { Pessoa } from "../models/Pessoa";
+import { isDataValida } from "../services/AuxiliarService";
 import {
   cadastrarPessoa,
   verificarEmailPessoa,
@@ -45,11 +46,10 @@ export function NavItems() {
   const [dataInvalida, setDataInvalida] = useState<boolean>(false);
 
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
-
-      setDataInvalida(false);
+    setDataInvalida(false);
 
     if (!isDataValida(data.dataDeNascimento)) {
-      setDataInvalida(true)
+      setDataInvalida(true);
       return;
     }
 
@@ -91,15 +91,6 @@ export function NavItems() {
     }
   }
 
-  function isDataValida(dataDeNascimento: string) {
-    const nascimento = new Date(dataDeNascimento);
-
-    if ((isNaN(nascimento.getTime())) || (nascimento > new Date())) {
-      return false;
-    }
-
-    return true;
-  }
   return (
     <>
       {/* Drawer de cadastro de pessoa*/}
@@ -220,7 +211,11 @@ export function NavItems() {
                   ))
                 }
               />
-              {dataInvalida ? (<Text fontSize="14px" color="rgb(211, 66, 66)">Data inválida</Text>) : null}
+              {dataInvalida ? (
+                <Text fontSize="14px" color="rgb(211, 66, 66)">
+                  Data inválida
+                </Text>
+              ) : null}
             </form>
           </DrawerBody>
           <DrawerFooter>

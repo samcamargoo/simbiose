@@ -118,8 +118,8 @@ export function NavItems() {
                     required: "Nome é obrigatório",
                     pattern: {
                       value:
-                        /\b[A-Za-zÀ-ú][A-Za-zÀ-ú]+,?[A-Za-zÀ-ú][A-Za-zÀ-ú]{2,19}\b/gi,
-                      message: "Nome inválido",
+                      /^(([a-zA-Z\u00C0-\u00FF]{2,})+( [a-zA-Z\u00C0-\u00FF]+)+)$/gm,
+                      message: "Insira nome e sobrenome, somente letras e acentos."
                     },
                   })}
                 />

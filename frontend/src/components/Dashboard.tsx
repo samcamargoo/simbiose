@@ -1,4 +1,4 @@
-import '../assets/styles.css'
+import "../assets/styles.css";
 import {
   Button,
   Flex,
@@ -37,7 +37,10 @@ import { FaTrashAlt, FaUserEdit } from "react-icons/fa";
 import { Slide, toast } from "react-toastify";
 
 import { Pessoa } from "../models/Pessoa";
-import { formatarDataParaLocal, retornarDataPadrao } from "../services/AuxiliarService";
+import {
+  formatarDataParaLocal,
+  retornarDataPadrao,
+} from "../services/AuxiliarService";
 import {
   deletarPessoaPorId,
   editarPessoaPorId,
@@ -109,8 +112,6 @@ export function Dashboard() {
         setEmailEmUsoMessage(err.response.data);
       });
   };
-
-  
 
   function carregarListaDePessoas() {
     setLoadingPessoas(true);
@@ -188,9 +189,29 @@ export function Dashboard() {
                   defaultValue={pessoaParaEditar?.nome}
                   border="none"
                   focusBorderColor="rgb(130, 87, 230)"
-                  {...register("nome")}
+                  {...register("nome", {
+                    required: "Nome é obrigatório",
+                    pattern: {
+                      value:
+                      /^(([a-zA-Z\u00C0-\u00FF]{2,})+( [a-zA-Z\u00C0-\u00FF]+)+)$/gm,
+                      message: "Insira nome e sobrenome, somente letras e acentos.",
+                    },
+                  })}
                 />
               </InputGroup>
+              <ErrorMessage
+                errors={errors}
+                name="nome"
+                render={({ messages }) =>
+                  messages &&
+                  Object.entries(messages).map(([type, message]) => (
+                    <Text fontSize="14px" color="rgb(211, 66, 66)" key={type}>
+                      {message}
+                    </Text>
+                  ))
+                }
+              />
+              
 
               <InputGroup mb={2}>
                 <InputLeftElement
@@ -327,9 +348,7 @@ export function Dashboard() {
                     <Tr>
                       <Td color="#a8a8b3">{pessoa.nome}</Td>
                       <Td color="#a8a8b3">{pessoa.email}</Td>
-                      <Td color="#a8a8b3">
-                        {pessoa.dataDeNascimento}
-                      </Td>
+                      <Td color="#a8a8b3">{pessoa.dataDeNascimento}</Td>
                       <Td color="#a8a8b3">
                         <Icon
                           color="rgb(130, 87, 230)"
@@ -344,8 +363,10 @@ export function Dashboard() {
                               id: pessoa.id,
                               nome: pessoa.nome,
                               email: pessoa.email,
-                              dataDeNascimento: retornarDataPadrao(pessoa.dataDeNascimento)
-                            }
+                              dataDeNascimento: retornarDataPadrao(
+                                pessoa.dataDeNascimento
+                              ),
+                            };
                             setPessoaParaEditar(pessoaParaEditar);
                             onOpen();
                           }}

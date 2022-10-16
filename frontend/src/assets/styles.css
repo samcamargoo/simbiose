@@ -1,0 +1,9 @@
+input[id="data-nascimento"]::before { 
+	content: attr(placeholder);
+	width: 100%;
+    opacity: 0.6;
+    color: #A0AEC0
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before { display: none }

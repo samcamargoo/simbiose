@@ -13,16 +13,24 @@ import {
   InputLeftElement,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { ErrorMessage } from '@hookform/error-message';
-import React, { HtmlHTMLAttributes, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { AiOutlineCalendar, AiOutlineMail, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
-import { toast } from 'react-toastify';
+} from "@chakra-ui/react";
+import { ErrorMessage } from "@hookform/error-message";
+import React, { HtmlHTMLAttributes, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  AiOutlineCalendar,
+  AiOutlineMail,
+  AiOutlineUser,
+  AiOutlineUserAdd,
+} from "react-icons/ai";
+import { toast } from "react-toastify";
 
-import { Pessoa } from '../models/Pessoa';
-import { formatarDataParaLocal } from '../services/AuxiliarService';
-import { cadastrarPessoa, verificarEmailPessoa } from '../services/PessoaService';
+import { Pessoa } from "../models/Pessoa";
+import { formatarDataParaLocal } from "../services/AuxiliarService";
+import {
+  cadastrarPessoa,
+  verificarEmailPessoa,
+} from "../services/PessoaService";
 
 export function NavItems() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,7 +47,9 @@ export function NavItems() {
   const cadastrar: SubmitHandler<Pessoa> = (data: Pessoa) => {
     setDataInvalida(false);
 
-  {/*Formatar Data MM-DD-YYYY para DD/MM/YYYY */}
+    {
+      /*Formatar Data MM-DD-YYYY para DD/MM/YYYY */
+    }
     data.dataDeNascimento = formatarDataParaLocal(data.dataDeNascimento);
 
     setIsCadastrando(true);
@@ -174,8 +184,10 @@ export function NavItems() {
                   children={<AiOutlineCalendar />}
                 />
                 <Input
+                  id="data-nascimento"
                   max={new Date().toISOString().split("T")[0]}
                   type="date"
+                  required
                   placeholder="Data de Nascimento"
                   border="none"
                   color="white"
